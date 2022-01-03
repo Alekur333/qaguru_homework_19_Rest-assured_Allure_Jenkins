@@ -1,9 +1,9 @@
-18. REST API. Продолжаем изучать
-
-https://qa.guru/pl/teach/control/lesson/view?id=219025052
+19. REST API. Подключаем Allure
+https://qa.guru/pl/teach/control/lesson/view?id=230245997
 
 Задание
 
-Сайт магазина http://demowebshop.tricentis.com/
+Сделать сборку с api-тестами в Allure Testops
 
-Исследовать сайт магазина, автоматизировать проверку ui-взаимодействия по api (pазработать любой автотест)
+С AllureListener & Custom templates
+
