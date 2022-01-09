@@ -28,6 +28,7 @@ public class BookStoreTests {
 
 
     @Test
+    @Deprecated
     void authorizeGenerateTokenTest() {
 //        String data = "{" +
 //                "  \"userName\": \"alex\"," +
@@ -54,6 +55,7 @@ public class BookStoreTests {
     }
 
     @Test
+    @Deprecated
     void authorizeGenerateTokenWithTemplatesTest() {
 
         Map<String, String> data = new HashMap<>();
