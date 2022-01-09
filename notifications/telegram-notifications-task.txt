@@ -1,0 +1,27 @@
+//// local
+Java \
+"-DprojectName=PROJECT_NAME" \
+"-Denv=ENVIRONMENT" \
+"-DreportLink=BUILD_URL" \
+"-Dcomm=Any comment here" \
+"-Dconfig.file=notifications/telegram.json" \
+-jar allure-notifications-3.1.2.jar
+
+//// remote для Jenlins Post build tasks после Allure
+//// сначала Script
+cd ..
+FILE=./allure-notifications-3.1.2.jar
+if [ ! -f "$FILE" ]; then
+   wget https://github.com/qa-guru/allure-notifications/releases/download/3.1.2/allure-notifications-3.1.2.jar
+fi
+
+//// потом Script - java запускает jar файл с параметрами
+java  \
+"-DprojectName=${PROJECT_NAME}" \  		//внутренняя переменная jenkins
+"-Denv=${ENVIRONMENT}" \
+"-DreportLink=${BUILD_URL}" \.   	 	//внутренняя переменная jenkins
+"-Dcomm=Any comment here" \
+"-Dconfig.file= notifications/telegram.json " \
+-jar ../allure-notifications-3.1.2.jar
+
+
