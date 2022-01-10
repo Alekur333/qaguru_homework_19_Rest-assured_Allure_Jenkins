@@ -6,6 +6,7 @@ import com.github.fge.jsonschema.main.JsonSchemaFactory;
 import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -28,7 +29,7 @@ public class BookStoreTests {
 
 
     @Test
-    @Deprecated
+    @Disabled
     void authorizeGenerateTokenTest() {
 //        String data = "{" +
 //                "  \"userName\": \"alex\"," +
@@ -55,7 +56,7 @@ public class BookStoreTests {
     }
 
     @Test
-    @Deprecated
+    @Disabled
     void authorizeGenerateTokenWithTemplatesTest() {
 
         Map<String, String> data = new HashMap<>();
