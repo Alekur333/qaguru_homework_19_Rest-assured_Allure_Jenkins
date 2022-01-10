@@ -17,7 +17,10 @@ import static io.qameta.allure.Allure.step;
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static kur.alex.filters.CustomLogFilter.customLogFilter;
+import static kur.alex.tests.bookstore.Specs.request;
+import static kur.alex.tests.bookstore.Specs.responseSpec;
 import static org.hamcrest.Matchers.is;
+
 
 public class BookStoreTests {
 
@@ -64,19 +67,19 @@ public class BookStoreTests {
         data.put("password", "asdsad#frew_DFS2");
 
         step("Generate token", () ->
-        given()
-                .filter(customLogFilter().withCustomTemplates())
-                .contentType("application/json")
-                .accept("application/json")
-                .body(data)
-                .when()
-                .log().uri()
-                .log().body()
-                .post("/Account/v1/GenerateToken")
-                .then()
-                .log().body()
-                .body("status", is("Success"))
-                .body("result", is("User authorized successfully."))
+                given()
+                        .filter(customLogFilter().withCustomTemplates())
+                        .contentType("application/json")
+                        .accept("application/json")
+                        .body(data)
+                        .when()
+                        .log().uri()
+                        .log().body()
+                        .post("/Account/v1/GenerateToken")
+                        .then()
+                        .log().body()
+                        .body("status", is("Success"))
+                        .body("result", is("User authorized successfully."))
         );
         step("Any UI action");
     }
@@ -89,21 +92,45 @@ public class BookStoreTests {
         data.put("password", "asdsad#frew_DFS2");
 
         step("Generate token", () ->
-        given()
-                .filter(customLogFilter().withCustomTemplates())
-                .contentType("application/json")
-                .accept("application/json")
-                .body(data)
-                .when()
-                .log().uri()
-                .log().body()
-                .post("/Account/v1/GenerateToken")
-                .then()
-                .log().body()
-                .body(matchesJsonSchemaInClasspath("schemas/GetAuthorizationToken.json"))
-                .body("status", is("Success"))
-                .body("result", is("User authorized successfully."))
+                given()
+                        .filter(customLogFilter().withCustomTemplates())
+                        .contentType("application/json")
+                        .accept("application/json")
+                        .body(data)
+                        .when()
+                        .log().uri()
+                        .log().body()
+                        .post("/Account/v1/GenerateToken")
+                        .then()
+                        .log().all()
+                        .statusCode(200)
+                        .body(matchesJsonSchemaInClasspath("schemas/GetAuthorizationToken.json"))
+                        .body("status", is("Success"))
+                        .body("result", is("User authorized successfully."))
+
         );
         step("Any UI action");
+    }
+
+    @Test
+    void authorizeGenerateTokenWithTemplatesSchemeValidtionSpecsTest() {
+
+        Map<String, String> data = new HashMap<>();
+        data.put("userName", "alex");
+        data.put("password", "asdsad#frew_DFS2");
+
+        step("Generate token", () ->
+                given()
+                        .spec(request)
+                        .body(data)
+                        .when()
+                        .post("/Account/v1/GenerateToken")
+                        .then()
+                        .spec(responseSpec)
+                        .log().all()
+                        .body(matchesJsonSchemaInClasspath("schemas/GetAuthorizationToken.json"))
+                        .body("status", is("Success"))
+                        .body("result", is("User authorized successfully."))
+        );
     }
 }
