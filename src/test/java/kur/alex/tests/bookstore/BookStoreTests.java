@@ -24,10 +24,62 @@ import static org.hamcrest.Matchers.is;
 
 public class BookStoreTests {
 
+    final static String BASE_URI = "https://demoqa.com";
+    final static String BASE_URL = "https://demoqa.com";
+
     @BeforeAll
     static void configureBaseUrl() {
-        RestAssured.baseURI = "https://demoqa.com";
-        Configuration.baseUrl = "https://demoqa.com";
+        RestAssured.baseURI = BASE_URI;
+        Configuration.baseUrl = BASE_URL;
+    }
+
+    @Test
+    void authorizeGenerateTokenWithTemplatesSchemeValidtionTest() {
+
+        Map<String, String> data = new HashMap<>();
+        data.put("userName", "alex");
+        data.put("password", "asdsad#frew_DFS2");
+
+        step("Generate token", () ->
+                given()
+                        .filter(customLogFilter().withCustomTemplates())
+                        .contentType("application/json")
+                        .accept("application/json")
+                        .body(data)
+                        .when()
+                        .log().uri()
+                        .log().body()
+                        .post("/Account/v1/GenerateToken")
+                        .then()
+                        .log().all()
+                        .statusCode(200)
+                        .body(matchesJsonSchemaInClasspath("schemas/GetAuthorizationToken.json"))
+                        .body("status", is("Success"))
+                        .body("result", is("User authorized successfully."))
+
+        );
+    }
+
+    @Test
+    void authorizeGenerateTokenWithTemplatesSchemeValidtionSpecsTest() {
+
+        Map<String, String> data = new HashMap<>();
+        data.put("userName", "alex");
+        data.put("password", "asdsad#frew_DFS2");
+
+        step("Generate token", () ->
+                given()
+                        .spec(request)
+                        .body(data)
+                        .when()
+                        .post("/Account/v1/GenerateToken")
+                        .then()
+                        .spec(responseSpec)
+                        .log().all()
+                        .body(matchesJsonSchemaInClasspath("schemas/GetAuthorizationToken.json"))
+                        .body("status", is("Success"))
+                        .body("result", is("User authorized successfully."))
+        );
     }
 
 
@@ -84,53 +136,4 @@ public class BookStoreTests {
         step("Any UI action");
     }
 
-    @Test
-    void authorizeGenerateTokenWithTemplatesSchemeValidtionTest() {
-
-        Map<String, String> data = new HashMap<>();
-        data.put("userName", "alex");
-        data.put("password", "asdsad#frew_DFS2");
-
-        step("Generate token", () ->
-                given()
-                        .filter(customLogFilter().withCustomTemplates())
-                        .contentType("application/json")
-                        .accept("application/json")
-                        .body(data)
-                        .when()
-                        .log().uri()
-                        .log().body()
-                        .post("/Account/v1/GenerateToken")
-                        .then()
-                        .log().all()
-                        .statusCode(200)
-                        .body(matchesJsonSchemaInClasspath("schemas/GetAuthorizationToken.json"))
-                        .body("status", is("Success"))
-                        .body("result", is("User authorized successfully."))
-
-        );
-        step("Any UI action");
-    }
-
-    @Test
-    void authorizeGenerateTokenWithTemplatesSchemeValidtionSpecsTest() {
-
-        Map<String, String> data = new HashMap<>();
-        data.put("userName", "alex");
-        data.put("password", "asdsad#frew_DFS2");
-
-        step("Generate token", () ->
-                given()
-                        .spec(request)
-                        .body(data)
-                        .when()
-                        .post("/Account/v1/GenerateToken")
-                        .then()
-                        .spec(responseSpec)
-                        .log().all()
-                        .body(matchesJsonSchemaInClasspath("schemas/GetAuthorizationToken.json"))
-                        .body("status", is("Success"))
-                        .body("result", is("User authorized successfully."))
-        );
-    }
 }
