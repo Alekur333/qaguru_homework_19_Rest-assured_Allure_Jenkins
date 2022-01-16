@@ -44,21 +44,18 @@ public class BookStoreTests {
         requestData.put("userName", "alex");
         requestData.put("password", "asdsad#frew_DFS2");
 
-//        step("Generate token", () ->
-               Token data =  given()
-                .spec(request)
-                .body(requestData)
-                .when()
-                .post("/Account/v1/GenerateToken")
-                .then()
-                .spec(responseSpec)
-                .log().all()
-                      .extract().as(Token.class);
-              assertEquals("Success", data.getStatus());
-//                .body(matchesJsonSchemaInClasspath("schemas/GetAuthorizationToken.json"))
-//                .body("status", is("Success"))
-//                .body("result", is("User authorized successfully."))
-//        );
+        step("Generate token", () -> {
+            Token data = given()
+                    .spec(request)
+                    .body(requestData)
+                    .when()
+                    .post("/Account/v1/GenerateToken")
+                    .then()
+                    .spec(responseSpec)
+                    .log().all()
+                    .extract().as(Token.class);
+            assertEquals("Success", data.getStatus());
+        });
     }
 
     @Test
